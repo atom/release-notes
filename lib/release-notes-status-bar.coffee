@@ -4,9 +4,14 @@
 module.exports =
 class ReleaseNotesStatusBar extends View
   @content: ->
-    @span type: 'button', class: 'release-notes-status icon icon-squirrel inline-block'
+    # 'blank' top level span due to issue #58
+    @span =>
+      @span type: 'button', class: 'release-notes-status icon icon-squirrel inline-block', outlet: 'statusIcon'
 
   initialize: (@statusBar, previousVersion) ->
+    if previousVersion? and previousVersion is atom.getVersion()
+      @statusIcon.addClass 'release-notes-status-available'
+
     @subscriptions = new CompositeDisposable()
 
     @on 'click', -> atom.workspace.open('atom://release-notes')
