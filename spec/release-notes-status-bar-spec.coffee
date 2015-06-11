@@ -3,6 +3,9 @@
 triggerUpdate = ->
   atom.commands.dispatch(atom.views.getView(atom.workspace), 'window:update-available', ['v22.0.0'])
 
+triggerPostUpdate = ->
+  atom.commands.dispatch(atom.views.getView(atom.workspace), 'window:update-available', ['v' + atom.getVersion()])
+
 describe "ReleaseNotesStatusBar", ->
   beforeEach ->
     spyOn(atom, 'isReleasedVersion').andReturn(true)
@@ -40,6 +43,6 @@ describe "ReleaseNotesStatusBar", ->
 
   describe "after an update", ->
     it "shows the view after an update has been downloaded", ->
-      triggerUpdate()
+      triggerPostUpdate()
       expect(atom.views.getView(atom.workspace)).toContain('.release-notes-status')
       expect(atom.views.getView(atom.workspace)).not.toContain('.release-notes-status-available')
