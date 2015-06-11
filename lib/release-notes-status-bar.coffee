@@ -18,7 +18,7 @@ class ReleaseNotesStatusBar extends View
   attach: (event) ->
     if Array.isArray(event?.detail)
       [version] = event.detail
-      if version isnt ('v' + atom.getVersion())
+      if version isnt ("v#{atom.getVersion()}")
         @addClass 'release-notes-status-available'
 
     @statusBar.addRightTile(item: this, priority: -100)
