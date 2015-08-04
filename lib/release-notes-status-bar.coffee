@@ -10,12 +10,17 @@ class ReleaseNotesStatusBar extends View
     @subscriptions = new CompositeDisposable()
 
     @on 'click', -> atom.workspace.open('atom://release-notes')
-    @subscriptions.add atom.commands.add 'atom-workspace', 'window:update-available', => @attach()
+    @subscriptions.add atom.commands.add 'atom-workspace', 'window:update-available', (event) => @attach(event)
 
     @subscriptions.add atom.tooltips.add(@element, title: 'Click to view the release notes')
     @attach() if previousVersion? and previousVersion isnt atom.getVersion()
 
-  attach: ->
+  attach: (event) ->
+    if Array.isArray(event?.detail)
+      [version] = event.detail
+      if version isnt ("v#{atom.getVersion()}")
+        @addClass 'release-notes-status-available'
+
     @statusBar.addRightTile(item: this, priority: -100)
 
   detached: ->
